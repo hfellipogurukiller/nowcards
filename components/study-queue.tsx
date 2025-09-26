@@ -10,6 +10,8 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Trophy, RotateCcw, BarChart3 } from "lucide-react"
 import { updateQuestionProgress } from "@/lib/progress-storage"
+import { ResetStatsModal } from "./reset-stats-modal"
+import { useUser } from "@/lib/user-context"
 
 interface StudyQueueProps {
   questions: Question[]
@@ -18,6 +20,7 @@ interface StudyQueueProps {
 }
 
 export function StudyQueue({ questions, setId, userId }: StudyQueueProps) {
+  const { user } = useUser()
   const [queue, setQueue] = useState<Question[]>([])
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null)
   const [submissionState, setSubmissionState] = useState<SubmissionState>("idle")
@@ -30,6 +33,8 @@ export function StudyQueue({ questions, setId, userId }: StudyQueueProps) {
     pct: 0,
   })
   const [showHistory, setShowHistory] = useState(false)
+  const [showResetModal, setShowResetModal] = useState(false)
+  const [isResetting, setIsResetting] = useState(false)
 
   // Initialize queue with shuffled questions
   useEffect(() => {
@@ -161,6 +166,52 @@ export function StudyQueue({ questions, setId, userId }: StudyQueueProps) {
     setShowHistory(false)
   }
 
+  const handleResetStats = async () => {
+    if (!user?.token) return
+
+    setIsResetting(true)
+    try {
+      const response = await fetch('/api/progress/reset', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`
+        },
+        body: JSON.stringify({ setId })
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to reset statistics')
+      }
+
+      // Reset local state
+      setStats({
+        total: questions.length,
+        answered: 0,
+        correct: 0,
+        wrong: 0,
+        pct: 0,
+      })
+      
+      // Reset queue with fresh questions
+      const shuffled = [...questions].sort(() => Math.random() - 0.5)
+      setQueue(shuffled)
+      setCurrentQuestion(shuffled[0] || null)
+      setSubmissionState("idle")
+      setFeedback(null)
+
+      // Show success message
+      const { toast } = await import('sonner')
+      toast.success('Estatísticas resetadas com sucesso!')
+    } catch (error) {
+      console.error('Reset error:', error)
+      const { toast } = await import('sonner')
+      toast.error('Erro ao resetar estatísticas')
+    } finally {
+      setIsResetting(false)
+    }
+  }
+
   if (stats.answered >= questions.length && queue.length === 0) {
     return (
       <div className="min-h-screen bg-background py-8 px-4">
@@ -182,14 +233,24 @@ export function StudyQueue({ questions, setId, userId }: StudyQueueProps) {
                 Taxa de acerto: <span className="font-medium">{Math.round((stats.correct / stats.total) * 100)}%</span>
               </p>
             </div>
-            <div className="flex gap-2">
-              <Button onClick={resetStudy} className="flex-1">
+            <div className="space-y-2">
+              <div className="flex gap-2">
+                <Button onClick={resetStudy} className="flex-1">
+                  <RotateCcw className="w-4 h-4 mr-2" />
+                  Estudar Novamente
+                </Button>
+                <Button variant="outline" onClick={() => setShowHistory(!showHistory)} className="flex-1">
+                  <BarChart3 className="w-4 h-4 mr-2" />
+                  {showHistory ? "Ocultar" : "Ver"} Histórico
+                </Button>
+              </div>
+              <Button 
+                variant="destructive" 
+                onClick={() => setShowResetModal(true)}
+                className="w-full"
+              >
                 <RotateCcw className="w-4 h-4 mr-2" />
-                Estudar Novamente
-              </Button>
-              <Button variant="outline" onClick={() => setShowHistory(!showHistory)} className="flex-1">
-                <BarChart3 className="w-4 h-4 mr-2" />
-                {showHistory ? "Ocultar" : "Ver"} Histórico
+                Resetar Estatísticas
               </Button>
             </div>
           </CardContent>
@@ -220,6 +281,14 @@ export function StudyQueue({ questions, setId, userId }: StudyQueueProps) {
         submissionState={submissionState}
         feedback={feedback}
         onNext={moveToNextQuestion}
+      />
+      
+      <ResetStatsModal
+        isOpen={showResetModal}
+        onClose={() => setShowResetModal(false)}
+        onConfirm={handleResetStats}
+        stats={stats}
+        loading={isResetting}
       />
     </div>
   )
