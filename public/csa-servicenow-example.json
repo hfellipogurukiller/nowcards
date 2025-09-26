@@ -1,0 +1,157 @@
+{
+  "certification": "ServiceNow Certified System Administrator (CSA)",
+  "description": "ServiceNow CSA Practice Questions - Example Set",
+  "version": "1.0",
+  "questions": [
+    {
+      "id": "csa-sn-001",
+      "question": "Qual é a tabela base para gerenciar usuários no ServiceNow?",
+      "options": [
+        "sys_user",
+        "user_table",
+        "person",
+        "employee"
+      ],
+      "correct_answer": 0,
+      "explanation": "A tabela sys_user é a tabela base para gerenciar usuários no ServiceNow. Ela contém informações como nome, email, departamento e status do usuário.",
+      "difficulty": "easy",
+      "tags": ["users", "tables", "administration"],
+      "domain": "User Administration & Security"
+    },
+    {
+      "id": "csa-sn-002",
+      "question": "Qual é a diferença entre um Business Rule e um Client Script?",
+      "options": [
+        "Business Rules executam no servidor, Client Scripts no navegador",
+        "Business Rules são mais rápidos que Client Scripts",
+        "Client Scripts só funcionam em formulários, Business Rules em qualquer lugar",
+        "Não há diferença entre eles"
+      ],
+      "correct_answer": 0,
+      "explanation": "Business Rules executam no servidor (server-side) e são acionadas por eventos de banco de dados, enquanto Client Scripts executam no navegador (client-side) e são acionadas por eventos de interface.",
+      "difficulty": "medium",
+      "tags": ["business-rules", "client-scripts", "scripting"],
+      "domain": "Business Rules & Workflow"
+    },
+    {
+      "id": "csa-sn-003",
+      "question": "Em um Business Rule, qual é a diferença entre 'before' e 'after' no campo 'When to run'?",
+      "options": [
+        "before: executa antes da validação, after: executa após a validação",
+        "before: executa antes do commit, after: executa após o commit",
+        "before: executa no cliente, after: executa no servidor",
+        "before: executa uma vez, after: executa múltiplas vezes"
+      ],
+      "correct_answer": 1,
+      "explanation": "Business Rules 'before' executam antes do commit da transação no banco de dados, permitindo modificações nos dados. Business Rules 'after' executam após o commit, sendo ideais para notificações e integrações.",
+      "difficulty": "hard",
+      "tags": ["business-rules", "scripting", "database"],
+      "domain": "Business Rules & Workflow"
+    },
+    {
+      "id": "csa-sn-004",
+      "question": "Qual é o propósito de um ACL (Access Control List) no ServiceNow?",
+      "options": [
+        "Controlar o acesso a registros e campos específicos",
+        "Gerenciar a aparência dos formulários",
+        "Configurar notificações automáticas",
+        "Definir workflows de aprovação"
+      ],
+      "correct_answer": 0,
+      "explanation": "ACLs controlam o acesso a registros e campos específicos no ServiceNow. Eles definem quem pode ver, criar, modificar ou deletar registros baseado em condições como usuário, grupo, papel ou propriedades do registro.",
+      "difficulty": "medium",
+      "tags": ["acls", "security", "access-control"],
+      "domain": "User Administration & Security"
+    },
+    {
+      "id": "csa-sn-005",
+      "question": "Qual é a diferença entre um Incident e um Problem no ServiceNow?",
+      "options": [
+        "Incident é um evento único, Problem é a causa raiz de múltiplos incidentes",
+        "Incident é mais urgente que Problem",
+        "Incident é criado automaticamente, Problem é criado manualmente",
+        "Não há diferença entre eles"
+      ],
+      "correct_answer": 0,
+      "explanation": "Um Incident representa um evento único que afeta o serviço, enquanto um Problem representa a causa raiz que pode gerar múltiplos incidentes. Problems são investigados para encontrar soluções permanentes.",
+      "difficulty": "medium",
+      "tags": ["incident-management", "problem-management", "itil"],
+      "domain": "Incident & Problem Management"
+    },
+    {
+      "id": "csa-sn-006",
+      "question": "Qual é o propósito de um UI Policy no ServiceNow?",
+      "options": [
+        "Controlar a visibilidade e comportamento de campos em formulários",
+        "Definir permissões de acesso a registros",
+        "Configurar notificações por email",
+        "Criar workflows automáticos"
+      ],
+      "correct_answer": 0,
+      "explanation": "UI Policies controlam a visibilidade, obrigatoriedade e comportamento de campos em formulários baseado em condições. Elas permitem mostrar/ocultar campos, tornar campos obrigatórios ou somente leitura dinamicamente.",
+      "difficulty": "medium",
+      "tags": ["ui-policies", "forms", "user-interface"],
+      "domain": "Forms & UI Components"
+    },
+    {
+      "id": "csa-sn-007",
+      "question": "Qual é a diferença entre um Change Request e um Change Task?",
+      "options": [
+        "Change Request é a solicitação de mudança, Change Task é a tarefa de implementação",
+        "Change Request é mais urgente que Change Task",
+        "Change Request é criado automaticamente, Change Task é criado manualmente",
+        "Não há diferença entre eles"
+      ],
+      "correct_answer": 0,
+      "explanation": "Change Request é a solicitação formal de mudança que passa por aprovação, enquanto Change Task são as tarefas específicas de implementação da mudança. Um Change Request pode ter múltiplos Change Tasks.",
+      "difficulty": "medium",
+      "tags": ["change-management", "change-request", "change-task"],
+      "domain": "Change Management"
+    },
+    {
+      "id": "csa-sn-008",
+      "question": "Qual é o propósito de um Service Catalog no ServiceNow?",
+      "options": [
+        "Fornecer uma interface para usuários solicitarem serviços",
+        "Armazenar documentação técnica",
+        "Gerenciar usuários e grupos",
+        "Configurar integrações externas"
+      ],
+      "correct_answer": 0,
+      "explanation": "Service Catalog é uma interface self-service onde usuários podem solicitar serviços, itens e recursos. Ele automatiza o processo de solicitação e aprovação, melhorando a experiência do usuário.",
+      "difficulty": "easy",
+      "tags": ["service-catalog", "self-service", "request-management"],
+      "domain": "Service Catalog & Request Management"
+    },
+    {
+      "id": "csa-sn-009",
+      "question": "Qual é a diferença entre um Business Rule e um UI Action?",
+      "options": [
+        "Business Rule executa no servidor, UI Action executa no cliente",
+        "Business Rule é mais rápido que UI Action",
+        "Business Rule só funciona em formulários, UI Action em qualquer lugar",
+        "Não há diferença entre eles"
+      ],
+      "correct_answer": 0,
+      "explanation": "Business Rules executam no servidor (server-side) e são acionadas por eventos de banco de dados, enquanto UI Actions executam no cliente (client-side) e são acionadas por eventos de interface como cliques em botões.",
+      "difficulty": "hard",
+      "tags": ["business-rules", "ui-actions", "scripting"],
+      "domain": "Business Rules & Workflow"
+    },
+    {
+      "id": "csa-sn-010",
+      "question": "Qual é o propósito de um Knowledge Base no ServiceNow?",
+      "options": [
+        "Armazenar e compartilhar conhecimento organizacional",
+        "Gerenciar usuários e permissões",
+        "Configurar workflows automáticos",
+        "Monitorar performance do sistema"
+      ],
+      "correct_answer": 0,
+      "explanation": "Knowledge Base é um repositório centralizado de conhecimento organizacional que permite criar, armazenar e compartilhar artigos, procedimentos e soluções para problemas comuns, melhorando a eficiência do suporte.",
+      "difficulty": "easy",
+      "tags": ["knowledge-base", "documentation", "knowledge-management"],
+      "domain": "Knowledge Management"
+    }
+  ]
+}
