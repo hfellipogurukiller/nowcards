@@ -133,8 +133,8 @@ export function QuestionCard({ q, onSubmit, submissionState, feedback, onNext }:
     const isCorrect = q.options.find((opt) => opt.id === optionId)?.is_correct
     const wasSelected = selectedIds.includes(optionId)
 
-    if (isCorrect) return "bg-success/10 border-success text-success-foreground"
-    if (wasSelected && !isCorrect) return "bg-destructive/10 border-destructive text-destructive-foreground"
+    if (isCorrect) return "bg-success/30 border-success text-success-foreground shadow-lg border-2"
+    if (wasSelected && !isCorrect) return "bg-destructive/30 border-destructive text-destructive-foreground shadow-lg border-2"
     return ""
   }
 
@@ -187,7 +187,7 @@ export function QuestionCard({ q, onSubmit, submissionState, feedback, onNext }:
         </div>
       )}
 
-      <Card className="border-2 shadow-lg">
+      <Card className="border-2 shadow-lg bg-card border-border">
         <CardHeader className="pb-4">
           <CardTitle className="text-lg sm:text-xl font-bold text-balance leading-tight">{q.stem}</CardTitle>
           <p className="text-sm text-muted-foreground font-medium">{getInstructionText()}</p>
@@ -206,6 +206,7 @@ export function QuestionCard({ q, onSubmit, submissionState, feedback, onNext }:
                   className={cn(
                     "flex items-start space-x-4 p-4 rounded-xl border-2 transition-all duration-200 touch-target",
                     "hover:shadow-md active:scale-[0.98] cursor-pointer",
+                    "bg-card border-border hover:border-primary/70 hover:shadow-md",
                     selectedIds.includes(option.id) && submissionState === "idle" && "border-primary bg-primary/5",
                     getOptionStyle(option.id),
                   )}
@@ -225,6 +226,7 @@ export function QuestionCard({ q, onSubmit, submissionState, feedback, onNext }:
                   className={cn(
                     "flex items-start space-x-4 p-4 rounded-xl border-2 transition-all duration-200 touch-target",
                     "hover:shadow-md active:scale-[0.98] cursor-pointer",
+                    "bg-card border-border hover:border-primary/70 hover:shadow-md",
                     selectedIds.includes(option.id) && submissionState === "idle" && "border-primary bg-primary/5",
                     getOptionStyle(option.id),
                   )}
