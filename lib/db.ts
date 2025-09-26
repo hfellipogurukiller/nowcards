@@ -33,49 +33,67 @@ export async function getStudySession(setId: string): Promise<StudySession | nul
   try {
     const connection = await pool.getConnection()
     
-    // Get study set
-    const [setRows] = await connection.execute(
-      'SELECT id, title, description FROM study_sets WHERE id = ?',
-      [setId]
-    )
+    // Optimized single query with JOIN - much faster for large datasets
+    const [rows] = await connection.execute(`
+      SELECT 
+        s.id as set_id,
+        s.title as set_title,
+        s.description as set_description,
+        q.id as question_id,
+        q.type as question_type,
+        q.stem as question_stem,
+        q.explanation as question_explanation,
+        q.select_count as question_select_count,
+        qo.id as option_id,
+        qo.text as option_text,
+        qo.is_correct as option_is_correct
+      FROM study_sets s
+      INNER JOIN questions q ON s.id = q.set_id
+      LEFT JOIN question_options qo ON q.id = qo.question_id
+      WHERE s.id = ?
+      ORDER BY q.id, qo.id
+    `, [setId])
     
-    if (!Array.isArray(setRows) || setRows.length === 0) {
+    if (!Array.isArray(rows) || rows.length === 0) {
       connection.release()
       return null
     }
     
-    const set = setRows[0] as StudySet
+    // Process results into structured data
+    const set: StudySet = {
+      id: (rows[0] as any).set_id,
+      title: (rows[0] as any).set_title,
+      description: (rows[0] as any).set_description
+    }
     
-    // Get questions for this set
-    const [questionRows] = await connection.execute(
-      'SELECT id, type, stem, explanation, select_count FROM questions WHERE set_id = ?',
-      [setId]
-    )
+    // Group questions and options
+    const questionsMap = new Map<string, Question>()
     
-    const questions: Question[] = []
-    
-    for (const questionRow of questionRows as any[]) {
-      // Get options for each question
-      const [optionRows] = await connection.execute(
-        'SELECT id, text, is_correct FROM question_options WHERE question_id = ? ORDER BY id',
-        [questionRow.id]
-      )
+    for (const row of rows as any[]) {
+      const questionId = row.question_id
       
-      const question: Question = {
-        id: questionRow.id,
-        type: questionRow.type,
-        stem: questionRow.stem,
-        explanation: questionRow.explanation,
-        select_count: questionRow.select_count,
-        options: (optionRows as any[]).map(opt => ({
-          id: opt.id,
-          text: opt.text,
-          is_correct: Boolean(opt.is_correct)
-        }))
+      if (!questionsMap.has(questionId)) {
+        questionsMap.set(questionId, {
+          id: questionId,
+          type: row.question_type,
+          stem: row.question_stem,
+          explanation: row.question_explanation,
+          select_count: row.question_select_count,
+          options: []
+        })
       }
       
-      questions.push(question)
+      // Add option if it exists
+      if (row.option_id) {
+        questionsMap.get(questionId)!.options.push({
+          id: row.option_id,
+          text: row.option_text,
+          is_correct: Boolean(row.option_is_correct)
+        })
+      }
     }
+    
+    const questions = Array.from(questionsMap.values())
     
     connection.release()
     
