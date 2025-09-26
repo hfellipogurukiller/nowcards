@@ -167,10 +167,15 @@ export function StudyQueue({ questions, setId, userId }: StudyQueueProps) {
   }
 
   const handleResetStats = async () => {
-    if (!user?.token) return
+    console.log('handleResetStats called', { user: user?.id, setId })
+    if (!user?.token) {
+      console.log('No user token available')
+      return
+    }
 
     setIsResetting(true)
     try {
+      console.log('Calling reset API...')
       const response = await fetch('/api/progress/reset', {
         method: 'POST',
         headers: {
@@ -180,9 +185,15 @@ export function StudyQueue({ questions, setId, userId }: StudyQueueProps) {
         body: JSON.stringify({ setId })
       })
 
+      console.log('Reset API response:', response.status, response.statusText)
+
       if (!response.ok) {
+        const errorData = await response.json()
+        console.error('Reset API error:', errorData)
         throw new Error('Failed to reset statistics')
       }
+
+      console.log('Reset successful, updating local state...')
 
       // Reset local state
       setStats({
@@ -199,6 +210,8 @@ export function StudyQueue({ questions, setId, userId }: StudyQueueProps) {
       setCurrentQuestion(shuffled[0] || null)
       setSubmissionState("idle")
       setFeedback(null)
+
+      console.log('Local state reset completed')
 
       // Show success message
       const { toast } = await import('sonner')

@@ -147,7 +147,10 @@ export function ProgressDashboard({ setId, totalQuestions, onResetStats, showRes
               <Button 
                 variant="destructive" 
                 size="sm"
-                onClick={onResetStats}
+                onClick={() => {
+                  console.log('Reset button clicked in ProgressDashboard')
+                  onResetStats()
+                }}
                 className="w-full gap-2"
               >
                 <RotateCcw className="h-4 w-4" />
