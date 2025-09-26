@@ -11,6 +11,7 @@ import { UserHeader } from "@/components/user-header"
 import { LogoutButton } from "@/components/logout-button"
 import { useAuthCheck } from "@/hooks/use-auth-check"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { Logo } from "@/components/logo"
 
 interface StudySet {
   id: string
@@ -63,7 +64,7 @@ export default function HomePage() {
           <div className="container mx-auto px-4 py-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <img src="/logo.png" alt="nowcards" className="h-10 w-auto" />
+                <Logo className="h-10 w-auto" />
               </div>
               <div className="flex items-center gap-2">
                 <ThemeToggle />
@@ -182,7 +183,7 @@ export default function HomePage() {
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <img src="/logo.png" alt="nowcards" className="h-10 w-auto" />
+              <Logo className="h-10 w-auto" />
             </div>
                 <div className="flex items-center gap-2">
                   <ThemeToggle />

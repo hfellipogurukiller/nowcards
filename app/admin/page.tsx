@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Upload, Download, Database, CheckCircle, AlertCircle, Loader2 } from "lucide-react"
 import { toast } from "sonner"
+import { Logo } from "@/components/logo"
 
 interface Question {
   id: string
@@ -160,7 +161,7 @@ export default function AdminPage() {
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <img src="/logo.png" alt="nowcards" className="h-10 w-auto" />
+              <Logo className="h-10 w-auto" />
               <div>
                 <h1 className="text-2xl font-bold">Admin Panel</h1>
                 <p className="text-sm text-muted-foreground">Gerenciar questões e certificações</p>

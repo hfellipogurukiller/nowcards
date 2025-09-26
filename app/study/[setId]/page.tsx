@@ -10,6 +10,7 @@ import { AlertCircle, ArrowLeft, BookOpen } from "lucide-react"
 import { useUser } from "@/lib/user-context"
 import { UserSetup } from "@/components/user-setup"
 import { UserHeader } from "@/components/user-header"
+import { Logo } from "@/components/logo"
 import Link from "next/link"
 
 export default function StudyPage() {
@@ -60,7 +61,7 @@ export default function StudyPage() {
                     Voltar
                   </Button>
                 </Link>
-                <img src="/logo.png" alt="nowcards" className="h-8 w-auto" />
+                       <Logo className="h-8 w-auto" />
               </div>
               <UserHeader />
             </div>
@@ -89,7 +90,7 @@ export default function StudyPage() {
                     Voltar
                   </Button>
                 </Link>
-                <img src="/logo.png" alt="nowcards" className="h-8 w-auto" />
+                       <Logo className="h-8 w-auto" />
               </div>
               <UserHeader />
             </div>
@@ -121,7 +122,7 @@ export default function StudyPage() {
                   Voltar
                 </Button>
               </Link>
-              <img src="/logo.png" alt="nowcards" className="h-8 w-auto" />
+                       <Logo className="h-8 w-auto" />
               {session && <span className="text-sm text-muted-foreground">• {session.questions.length} questões</span>}
             </div>
             <UserHeader />
