@@ -1,0 +1,64 @@
+{
+  "certification": "AWS Certified Solutions Architect (CSA)",
+  "description": "AWS CSA Practice Questions",
+  "version": "1.0",
+  "questions": [
+    {
+      "id": "csa-test-001",
+      "question": "Which AWS service provides a fully managed NoSQL database service?",
+      "options": [
+        "Amazon RDS",
+        "Amazon DynamoDB",
+        "Amazon Redshift",
+        "Amazon ElastiCache"
+      ],
+      "correct_answer": 1,
+      "explanation": "Amazon DynamoDB is a fully managed NoSQL database service that provides fast and predictable performance with seamless scalability.",
+      "difficulty": "easy",
+      "tags": [
+        "database",
+        "nosql",
+        "managed-services"
+      ],
+      "domain": "Database"
+    },
+    {
+      "id": "csa-test-002",
+      "question": "What is the maximum number of availability zones in a single AWS region?",
+      "options": [
+        "3",
+        "6",
+        "12",
+        "Unlimited"
+      ],
+      "correct_answer": 3,
+      "explanation": "AWS regions can have multiple availability zones, and the number varies by region. There's no fixed maximum.",
+      "difficulty": "medium",
+      "tags": [
+        "availability-zones",
+        "regions",
+        "infrastructure"
+      ],
+      "domain": "Infrastructure"
+    },
+    {
+      "id": "csa-test-003",
+      "question": "Which AWS service is best for storing and retrieving large amounts of unstructured data?",
+      "options": [
+        "Amazon S3",
+        "Amazon EBS",
+        "Amazon EFS",
+        "Amazon Glacier"
+      ],
+      "correct_answer": 0,
+      "explanation": "Amazon S3 (Simple Storage Service) is designed for storing and retrieving any amount of data from anywhere on the web.",
+      "difficulty": "easy",
+      "tags": [
+        "storage",
+        "s3",
+        "unstructured-data"
+      ],
+      "domain": "Storage"
+    }
+  ]
+}
