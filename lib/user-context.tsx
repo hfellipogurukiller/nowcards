@@ -5,44 +5,63 @@ import { createContext, useContext, useState, useEffect, type ReactNode } from "
 interface User {
   id: string
   name: string
-  avatar: string
+  email: string
+  avatar?: string
 }
 
 interface UserContextType {
   user: User | null
-  setUser: (user: User) => void
+  token: string | null
+  setUser: (user: User, token: string) => void
   clearUser: () => void
+  isLoading: boolean
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined)
 
 export function UserProvider({ children }: { children: ReactNode }) {
   const [user, setUserState] = useState<User | null>(null)
+  const [token, setTokenState] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
-  // Load user from localStorage on mount
+  // Load user and token from localStorage on mount
   useEffect(() => {
-    const savedUser = localStorage.getItem("studycards-user")
-    if (savedUser) {
+    const savedUser = localStorage.getItem("user")
+    const savedToken = localStorage.getItem("token")
+    
+    if (savedUser && savedToken) {
       try {
         setUserState(JSON.parse(savedUser))
+        setTokenState(savedToken)
       } catch (error) {
         console.error("Failed to parse saved user:", error)
-        localStorage.removeItem("studycards-user")
+        localStorage.removeItem("user")
+        localStorage.removeItem("token")
       }
     }
+    
+    setIsLoading(false)
   }, [])
 
-  const setUser = (newUser: User) => {
+  const setUser = (newUser: User, newToken: string) => {
     setUserState(newUser)
-    localStorage.setItem("studycards-user", JSON.stringify(newUser))
+    setTokenState(newToken)
+    localStorage.setItem("user", JSON.stringify(newUser))
+    localStorage.setItem("token", newToken)
   }
 
   const clearUser = () => {
     setUserState(null)
-    localStorage.removeItem("studycards-user")
+    setTokenState(null)
+    localStorage.removeItem("user")
+    localStorage.removeItem("token")
   }
 
-  return <UserContext.Provider value={{ user, setUser, clearUser }}>{children}</UserContext.Provider>
+  return (
+    <UserContext.Provider value={{ user, token, setUser, clearUser, isLoading }}>
+      {children}
+    </UserContext.Provider>
+  )
 }
 
 export function useUser() {

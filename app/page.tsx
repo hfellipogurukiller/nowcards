@@ -38,7 +38,125 @@ export default function HomePage() {
   }, [])
 
   if (!user) {
-    return <UserSetup />
+    return (
+      <div className="min-h-screen bg-background">
+        {/* Header */}
+        <header className="border-b bg-card">
+          <div className="container mx-auto px-4 py-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                  <BookOpen className="w-5 h-5 text-primary-foreground" />
+                </div>
+                <img src="/nowcards-logo.png" alt="nowcards" className="h-8 w-auto" />
+              </div>
+              <div className="flex gap-2">
+                <Link href="/login">
+                  <Button variant="outline">Entrar</Button>
+                </Link>
+                <Link href="/register">
+                  <Button>Criar Conta</Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Hero Section */}
+        <section className="container mx-auto px-4 py-12">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <h2 className="text-4xl font-bold mb-4 text-balance">Estude com Cartões Inteligentes</h2>
+            <p className="text-xl text-muted-foreground text-pretty mb-8">
+              Sistema de aprendizado adaptativo com questões de múltipla escolha. Cada usuário tem sua própria sessão de
+              estudo isolada.
+            </p>
+            <div className="flex gap-4 justify-center">
+              <Link href="/register">
+                <Button size="lg" className="gap-2">
+                  <BookOpen className="w-4 h-4" />
+                  Começar Agora
+                </Button>
+              </Link>
+              <Link href="/login">
+                <Button size="lg" variant="outline" className="gap-2">
+                  <Users className="w-4 h-4" />
+                  Já tenho conta
+                </Button>
+              </Link>
+            </div>
+          </div>
+
+          {/* Features */}
+          <div className="grid md:grid-cols-3 gap-6 mb-12">
+            <Card>
+              <CardHeader>
+                <Users className="w-8 h-8 text-primary mb-2" />
+                <CardTitle>Multi-usuário</CardTitle>
+                <CardDescription>Vários usuários podem estudar simultaneamente sem interferência</CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <TrendingUp className="w-8 h-8 text-accent mb-2" />
+                <CardTitle>Fila Inteligente</CardTitle>
+                <CardDescription>Questões erradas retornam mais cedo, corretas vão para o final</CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <BookOpen className="w-8 h-8 text-success mb-2" />
+                <CardTitle>Progresso Individual</CardTitle>
+                <CardDescription>Acompanhe seu desempenho com estatísticas detalhadas</CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+        </section>
+
+        {/* Instructions */}
+        <section className="bg-muted/50 py-12">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto">
+              <h3 className="text-2xl font-semibold mb-6 text-center">Como Usar</h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Atalhos de Teclado</CardTitle>
+                    <CardDescription>
+                      <div className="space-y-2 mt-2">
+                        <p>
+                          <kbd className="px-2 py-1 bg-muted rounded text-xs">Enter</kbd> - Conferir resposta
+                        </p>
+                        <p>
+                          <kbd className="px-2 py-1 bg-muted rounded text-xs">→</kbd> - Próxima questão
+                        </p>
+                      </div>
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Sistema de Fila</CardTitle>
+                    <CardDescription>
+                      <div className="space-y-2 mt-2">
+                        <p>
+                          ✅ <strong>Acertou:</strong> Questão vai para o final
+                        </p>
+                        <p>
+                          ❌ <strong>Errou:</strong> Questão volta após 2 posições
+                        </p>
+                      </div>
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    )
   }
 
   return (

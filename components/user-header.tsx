@@ -10,17 +10,40 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { LogOut, Settings, User } from "lucide-react"
 import { useUser } from "@/lib/user-context"
+import { useRouter } from "next/navigation"
 
 export function UserHeader() {
-  const { user, clearUser } = useUser()
+  const { user, token, clearUser } = useUser()
+  const router = useRouter()
 
   if (!user) return null
+
+  const handleLogout = async () => {
+    try {
+      // Call logout API
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      })
+    } catch (error) {
+      console.error('Logout error:', error)
+    } finally {
+      // Clear user data regardless of API call result
+      clearUser()
+      router.push('/')
+      router.refresh()
+    }
+  }
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="gap-2 h-auto p-2">
-          <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-lg">{user.avatar}</div>
+          <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-lg">
+            {user.name.charAt(0).toUpperCase()}
+          </div>
           <span className="font-medium">{user.name}</span>
         </Button>
       </DropdownMenuTrigger>
@@ -35,7 +58,7 @@ export function UserHeader() {
           Configurações
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={clearUser} className="text-destructive focus:text-destructive">
+        <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive">
           <LogOut className="w-4 h-4 mr-2" />
           Sair
         </DropdownMenuItem>
