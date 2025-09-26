@@ -10,6 +10,7 @@ import { UserSetup } from "@/components/user-setup"
 import { UserHeader } from "@/components/user-header"
 import { LogoutButton } from "@/components/logout-button"
 import { useAuthCheck } from "@/hooks/use-auth-check"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 interface StudySet {
   id: string
@@ -67,7 +68,8 @@ export default function HomePage() {
                 </div>
                 <img src="/nowcards-logo.png" alt="nowcards" className="h-8 w-auto" />
               </div>
-              <div className="flex gap-2">
+              <div className="flex items-center gap-2">
+                <ThemeToggle />
                 <Link href="/login">
                   <Button variant="outline">Entrar</Button>
                 </Link>
@@ -189,6 +191,7 @@ export default function HomePage() {
               <img src="/nowcards-logo.png" alt="nowcards" className="h-8 w-auto" />
             </div>
             <div className="flex items-center gap-2">
+              <ThemeToggle />
               <LogoutButton variant="outline" size="sm" />
               <UserHeader />
             </div>

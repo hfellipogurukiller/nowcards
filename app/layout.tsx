@@ -7,6 +7,7 @@ import "./globals.css"
 import { Suspense } from "react"
 import { UserProvider } from "@/lib/user-context"
 import { Toaster } from "@/components/ui/sonner"
+import { ThemeProvider } from "@/components/theme-provider"
 
 export const metadata: Metadata = {
   title: "nowcards - Sistema de Estudo MCQ",
@@ -20,15 +21,22 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
-        <UserProvider>
-          <Suspense>
-            {children}
-            <Analytics />
-          </Suspense>
-          <Toaster />
-        </UserProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <UserProvider>
+            <Suspense>
+              {children}
+              <Analytics />
+            </Suspense>
+            <Toaster />
+          </UserProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
