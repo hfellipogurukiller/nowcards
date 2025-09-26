@@ -35,6 +35,7 @@ export function StudyQueue({ questions, setId, userId }: StudyQueueProps) {
   const [showHistory, setShowHistory] = useState(false)
   const [showResetModal, setShowResetModal] = useState(false)
   const [isResetting, setIsResetting] = useState(false)
+  const [resetTrigger, setResetTrigger] = useState(0) // Trigger to force ProgressDashboard refresh
 
   // Initialize queue with shuffled questions
   useEffect(() => {
@@ -213,6 +214,9 @@ export function StudyQueue({ questions, setId, userId }: StudyQueueProps) {
 
       console.log('Local state reset completed')
 
+      // Trigger ProgressDashboard refresh
+      setResetTrigger(prev => prev + 1)
+
       // Show success message
       const { toast } = await import('sonner')
       toast.success('Estatísticas resetadas com sucesso!')
@@ -233,6 +237,7 @@ export function StudyQueue({ questions, setId, userId }: StudyQueueProps) {
         totalQuestions={questions.length}
         onResetStats={() => setShowResetModal(true)}
         showResetButton={true}
+        resetTrigger={resetTrigger}
       />
 
         <Card className="w-full max-w-md mx-auto text-center">
@@ -286,6 +291,7 @@ export function StudyQueue({ questions, setId, userId }: StudyQueueProps) {
         totalQuestions={questions.length}
         onResetStats={() => setShowResetModal(true)}
         showResetButton={true}
+        resetTrigger={resetTrigger}
       />
       <ProgressBar stats={stats} />
       <QuestionCard

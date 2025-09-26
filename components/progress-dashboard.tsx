@@ -15,9 +15,10 @@ interface ProgressDashboardProps {
   totalQuestions: number
   onResetStats?: () => void
   showResetButton?: boolean
+  resetTrigger?: number // Add trigger to force refresh
 }
 
-export function ProgressDashboard({ setId, totalQuestions, onResetStats, showResetButton = false }: ProgressDashboardProps) {
+export function ProgressDashboard({ setId, totalQuestions, onResetStats, showResetButton = false, resetTrigger }: ProgressDashboardProps) {
   const { user } = useUser()
   const [stats, setStats] = useState<SessionStats | null>(null)
   const [isStatsOpen, setIsStatsOpen] = useState(false)
@@ -26,7 +27,9 @@ export function ProgressDashboard({ setId, totalQuestions, onResetStats, showRes
     if (!user) return
 
     const updateStats = () => {
+      console.log('ProgressDashboard: Updating stats', { userId: user.id, setId, totalQuestions })
       const sessionStats = calculateSessionStats(user.id, setId, totalQuestions)
+      console.log('ProgressDashboard: Calculated stats', sessionStats)
       setStats(sessionStats)
     }
 
@@ -35,6 +38,7 @@ export function ProgressDashboard({ setId, totalQuestions, onResetStats, showRes
     // Update stats when localStorage changes (from other tabs/sessions)
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key?.includes("studycards-progress")) {
+        console.log('ProgressDashboard: Storage change detected', e.key)
         updateStats()
       }
     }
@@ -48,7 +52,7 @@ export function ProgressDashboard({ setId, totalQuestions, onResetStats, showRes
       window.removeEventListener("storage", handleStorageChange)
       clearInterval(interval)
     }
-  }, [user, setId, totalQuestions])
+  }, [user, setId, totalQuestions, resetTrigger])
 
   if (!user || !stats) {
     return null
