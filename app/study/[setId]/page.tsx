@@ -60,10 +60,7 @@ export default function StudyPage() {
                     Voltar
                   </Button>
                 </Link>
-                <div className="w-6 h-6 bg-primary rounded-md flex items-center justify-center">
-                  <BookOpen className="w-4 h-4 text-primary-foreground" />
-                </div>
-                <img src="/nowcards-logo.png" alt="nowcards" className="h-6 w-auto" />
+                <img src="/logo.png" alt="nowcards" className="h-8 w-auto" />
               </div>
               <UserHeader />
             </div>
@@ -92,10 +89,7 @@ export default function StudyPage() {
                     Voltar
                   </Button>
                 </Link>
-                <div className="w-6 h-6 bg-primary rounded-md flex items-center justify-center">
-                  <BookOpen className="w-4 h-4 text-primary-foreground" />
-                </div>
-                <img src="/nowcards-logo.png" alt="nowcards" className="h-6 w-auto" />
+                <img src="/logo.png" alt="nowcards" className="h-8 w-auto" />
               </div>
               <UserHeader />
             </div>
@@ -127,10 +121,7 @@ export default function StudyPage() {
                   Voltar
                 </Button>
               </Link>
-              <div className="w-6 h-6 bg-primary rounded-md flex items-center justify-center">
-                <BookOpen className="w-4 h-4 text-primary-foreground" />
-              </div>
-              <img src="/nowcards-logo.png" alt="nowcards" className="h-6 w-auto" />
+              <img src="/logo.png" alt="nowcards" className="h-8 w-auto" />
               {session && <span className="text-sm text-muted-foreground">• {session.questions.length} questões</span>}
             </div>
             <UserHeader />

@@ -18,7 +18,10 @@ export default function LoginPage() {
             </Link>
             <ThemeToggle />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">NowCards</h1>
+          <div className="flex flex-col items-center gap-4">
+            <img src="/logo.png" alt="nowcards" className="h-12 w-auto" />
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">NowCards</h1>
+          </div>
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
             Sistema de flashcards para estudos
           </p>

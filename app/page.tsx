@@ -63,10 +63,7 @@ export default function HomePage() {
           <div className="container mx-auto px-4 py-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                  <BookOpen className="w-5 h-5 text-primary-foreground" />
-                </div>
-                <img src="/nowcards-logo.png" alt="nowcards" className="h-8 w-auto" />
+                <img src="/logo.png" alt="nowcards" className="h-10 w-auto" />
               </div>
               <div className="flex items-center gap-2">
                 <ThemeToggle />
@@ -185,13 +182,22 @@ export default function HomePage() {
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <BookOpen className="w-5 h-5 text-primary-foreground" />
-              </div>
-              <img src="/nowcards-logo.png" alt="nowcards" className="h-8 w-auto" />
+              <img src="/logo.png" alt="nowcards" className="h-10 w-auto" />
             </div>
             <div className="flex items-center gap-2">
               <ThemeToggle />
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => {
+                  document.documentElement.classList.remove('dark')
+                  document.documentElement.classList.add('light')
+                  localStorage.setItem('theme', 'light')
+                  window.location.reload()
+                }}
+              >
+                ☀️ Forçar Claro
+              </Button>
               <LogoutButton variant="outline" size="sm" />
               <UserHeader />
             </div>
