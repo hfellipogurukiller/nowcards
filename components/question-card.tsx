@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback, useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -81,7 +81,7 @@ export function QuestionCard({ q, onSubmit, submissionState, feedback, onNext }:
     }
   }
 
-  const handleSingleSelect = (optionId: string) => {
+  const handleSingleSelect = useCallback((optionId: string) => {
     if (submissionState !== "idle") return
 
     setSelectedIds([optionId])
@@ -90,42 +90,44 @@ export function QuestionCard({ q, onSubmit, submissionState, feedback, onNext }:
     setTimeout(() => {
       onSubmit([optionId])
     }, 100)
-  }
+  }, [submissionState, onSubmit])
 
-  const handleMultiSelect = (optionId: string, checked: boolean) => {
+  const handleMultiSelect = useCallback((optionId: string, checked: boolean) => {
     if (submissionState !== "idle") return
 
-    let newSelectedIds: string[]
-    if (checked) {
-      newSelectedIds = [...selectedIds, optionId]
-    } else {
-      newSelectedIds = selectedIds.filter((id) => id !== optionId)
-    }
+    setSelectedIds(prev => {
+      let newSelectedIds: string[]
+      if (checked) {
+        newSelectedIds = [...prev, optionId]
+      } else {
+        newSelectedIds = prev.filter((id) => id !== optionId)
+      }
 
-    setSelectedIds(newSelectedIds)
+      if (q.type === "multi" && q.select_count && newSelectedIds.length === q.select_count) {
+        setTimeout(() => {
+          onSubmit(newSelectedIds)
+        }, 100)
+      }
 
-    if (q.type === "multi" && q.select_count && newSelectedIds.length === q.select_count) {
-      setTimeout(() => {
-        onSubmit(newSelectedIds)
-      }, 100)
-    }
-  }
+      return newSelectedIds
+    })
+  }, [submissionState, onSubmit, q.type, q.select_count])
 
-  const canSubmit = () => {
+  const canSubmit = useCallback(() => {
     if (selectedIds.length === 0) return false
     if (q.type === "multi" && q.select_count) {
       return selectedIds.length === q.select_count
     }
     return true
-  }
+  }, [selectedIds.length, q.type, q.select_count])
 
-  const getInstructionText = () => {
+  const getInstructionText = useMemo(() => {
     if (q.type === "single") return "Toque para selecionar uma resposta"
     if (q.type === "multi" && q.select_count) return `Selecione ${q.select_count} respostas`
     return "Marque todas as corretas"
-  }
+  }, [q.type, q.select_count])
 
-  const getOptionStyle = (optionId: string) => {
+  const getOptionStyle = useCallback((optionId: string) => {
     if (submissionState !== "answered" || !feedback) return ""
 
     const isCorrect = q.options.find((opt) => opt.id === optionId)?.is_correct
@@ -134,15 +136,15 @@ export function QuestionCard({ q, onSubmit, submissionState, feedback, onNext }:
     if (isCorrect) return "bg-success/30 border-success text-success-foreground shadow-lg border-2"
     if (wasSelected && !isCorrect) return "bg-destructive/30 border-destructive text-destructive-foreground shadow-lg border-2"
     return ""
-  }
+  }, [submissionState, feedback, q.options, selectedIds])
 
-  const getCorrectAnswersText = () => {
+  const getCorrectAnswersText = useMemo(() => {
     const correctOptions = q.options.filter((opt) => opt.is_correct)
     if (correctOptions.length === 1) {
       return `Resposta correta: ${correctOptions[0].text}`
     }
     return `Respostas corretas: ${correctOptions.map((opt) => opt.text).join(", ")}`
-  }
+  }, [q.options])
 
   return (
     <div
@@ -191,53 +193,39 @@ export function QuestionCard({ q, onSubmit, submissionState, feedback, onNext }:
           <p className="text-sm text-muted-foreground font-medium">{getInstructionText()}</p>
         </CardHeader>
         <CardContent className="space-y-3">
-          {q.type === "single" ? (
-            <div className="space-y-3">
-              {q.options.map((option) => (
+          <div className="space-y-3">
+            {q.options.map((option) => {
+              const isSelected = selectedIds.includes(option.id)
+              const optionStyle = getOptionStyle(option.id)
+              
+              return (
                 <div
                   key={option.id}
-                  onClick={() => q.type === "single" ? handleSingleSelect(option.id) : handleMultiSelect(option.id, !selectedIds.includes(option.id))}
+                  onClick={() => q.type === "single" ? handleSingleSelect(option.id) : handleMultiSelect(option.id, !isSelected)}
                   className={cn(
                     "flex items-start space-x-4 p-4 rounded-xl border-2 transition-all duration-200 touch-target",
                     "hover:shadow-md active:scale-[0.98] cursor-pointer",
                     "bg-card border-border hover:border-primary/70 hover:shadow-md",
-                    selectedIds.includes(option.id) && submissionState === "idle" && "border-primary bg-primary/5",
-                    getOptionStyle(option.id),
+                    isSelected && submissionState === "idle" && "border-primary bg-primary/5",
+                    optionStyle,
                   )}
                 >
-                  <div className="mt-1 flex-shrink-0 w-4 h-4 rounded-full border-2 border-border flex items-center justify-center">
-                    {selectedIds.includes(option.id) && <div className="w-2 h-2 rounded-full bg-primary" />}
+                  <div className={cn(
+                    "mt-1 flex-shrink-0 w-4 h-4 border-2 border-border flex items-center justify-center",
+                    q.type === "single" ? "rounded-full" : "rounded"
+                  )}>
+                    {isSelected && <div className={cn(
+                      "bg-primary",
+                      q.type === "single" ? "w-2 h-2 rounded-full" : "w-2 h-2 rounded"
+                    )} />}
                   </div>
                   <Label htmlFor={option.id} className="flex-1 cursor-pointer text-sm sm:text-base leading-relaxed">
                     {option.text}
                   </Label>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {q.options.map((option) => (
-                <div
-                  key={option.id}
-                  onClick={() => q.type === "single" ? handleSingleSelect(option.id) : handleMultiSelect(option.id, !selectedIds.includes(option.id))}
-                  className={cn(
-                    "flex items-start space-x-4 p-4 rounded-xl border-2 transition-all duration-200 touch-target",
-                    "hover:shadow-md active:scale-[0.98] cursor-pointer",
-                    "bg-card border-border hover:border-primary/70 hover:shadow-md",
-                    selectedIds.includes(option.id) && submissionState === "idle" && "border-primary bg-primary/5",
-                    getOptionStyle(option.id),
-                  )}
-                >
-                  <div className="mt-1 flex-shrink-0 w-4 h-4 rounded border-2 border-border flex items-center justify-center">
-                    {selectedIds.includes(option.id) && <div className="w-2 h-2 rounded bg-primary" />}
-                  </div>
-                  <Label htmlFor={option.id} className="flex-1 cursor-pointer text-sm sm:text-base leading-relaxed">
-                    {option.text}
-                  </Label>
-                </div>
-              ))}
-            </div>
-          )}
+              )
+            })}
+          </div>
 
           {submissionState === "idle" && q.type === "multi" && !q.select_count && (
             <Button

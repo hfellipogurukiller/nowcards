@@ -69,7 +69,7 @@ export function StudyQueue({ questions, setId, userId }: StudyQueueProps) {
     }
   }
 
-  const handleSubmit = async (markedIds: string[]) => {
+  const handleSubmit = useCallback(async (markedIds: string[]) => {
     if (!currentQuestion) return
 
     const isCorrect = gradeAnswer(currentQuestion, markedIds)
@@ -83,9 +83,7 @@ export function StudyQueue({ questions, setId, userId }: StudyQueueProps) {
     setFeedback(newFeedback)
     setSubmissionState("answered")
 
-    updateQuestionProgress(userId, setId, currentQuestion.id, isCorrect ? "correct" : "wrong")
-
-    // Update stats
+    // Update stats immediately (synchronous)
     setStats((prev) => {
       const newAnswered = prev.answered + 1
       const newCorrect = prev.correct + (isCorrect ? 1 : 0)
@@ -101,22 +99,23 @@ export function StudyQueue({ questions, setId, userId }: StudyQueueProps) {
       }
     })
 
-    // Record progress (optional API call)
-    try {
-      await fetch("/api/progress", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: userId,
-          set_id: setId,
-          question_id: currentQuestion.id,
-          result: isCorrect ? "correct" : "wrong",
-        }),
-      })
-    } catch (error) {
+    // Update localStorage progress (synchronous)
+    updateQuestionProgress(userId, setId, currentQuestion.id, isCorrect ? "correct" : "wrong")
+
+    // Record progress (async, non-blocking)
+    fetch("/api/progress", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        user_id: userId,
+        set_id: setId,
+        question_id: currentQuestion.id,
+        result: isCorrect ? "correct" : "wrong",
+      }),
+    }).catch(error => {
       console.error("Failed to record progress:", error)
-    }
-  }
+    })
+  }, [currentQuestion, userId, setId])
 
   const moveToNextQuestion = useCallback(() => {
     if (!currentQuestion) return
