@@ -8,6 +8,8 @@ import Link from "next/link"
 import { useUser } from "@/lib/user-context"
 import { UserSetup } from "@/components/user-setup"
 import { UserHeader } from "@/components/user-header"
+import { LogoutButton } from "@/components/logout-button"
+import { useAuthCheck } from "@/hooks/use-auth-check"
 
 interface StudySet {
   id: string
@@ -20,6 +22,9 @@ export default function HomePage() {
   const { user, isLoading: userLoading } = useUser()
   const [sets, setSets] = useState<StudySet[]>([])
   const [loading, setLoading] = useState(true)
+  
+  // Check authentication status
+  useAuthCheck()
 
   useEffect(() => {
     async function fetchSets() {
@@ -183,7 +188,10 @@ export default function HomePage() {
               </div>
               <img src="/nowcards-logo.png" alt="nowcards" className="h-8 w-auto" />
             </div>
-            <UserHeader />
+            <div className="flex items-center gap-2">
+              <LogoutButton variant="outline" size="sm" />
+              <UserHeader />
+            </div>
           </div>
         </div>
       </header>

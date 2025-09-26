@@ -6,6 +6,7 @@ import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import { Suspense } from "react"
 import { UserProvider } from "@/lib/user-context"
+import { Toaster } from "@/components/ui/sonner"
 
 export const metadata: Metadata = {
   title: "nowcards - Sistema de Estudo MCQ",
@@ -26,6 +27,7 @@ export default function RootLayout({
             {children}
             <Analytics />
           </Suspense>
+          <Toaster />
         </UserProvider>
       </body>
     </html>

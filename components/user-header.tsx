@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -8,27 +9,38 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { LogOut, Settings, User } from "lucide-react"
+import { LogOut, Settings, User, Loader2 } from "lucide-react"
 import { useUser } from "@/lib/user-context"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 
 export function UserHeader() {
   const { user, token, clearUser } = useUser()
   const router = useRouter()
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
 
   if (!user) return null
 
   const handleLogout = async () => {
+    setIsLoggingOut(true)
+    
     try {
       // Call logout API
-      await fetch('/api/auth/logout', {
+      const response = await fetch('/api/auth/logout', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
         },
       })
+
+      if (response.ok) {
+        toast.success('Logout realizado com sucesso!')
+      } else {
+        toast.error('Erro ao fazer logout, mas você foi desconectado')
+      }
     } catch (error) {
       console.error('Logout error:', error)
+      toast.error('Erro de conexão, mas você foi desconectado')
     } finally {
       // Clear user data regardless of API call result
       clearUser()
@@ -58,9 +70,17 @@ export function UserHeader() {
           Configurações
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive">
-          <LogOut className="w-4 h-4 mr-2" />
-          Sair
+        <DropdownMenuItem 
+          onClick={handleLogout} 
+          className="text-destructive focus:text-destructive"
+          disabled={isLoggingOut}
+        >
+          {isLoggingOut ? (
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+          ) : (
+            <LogOut className="w-4 h-4 mr-2" />
+          )}
+          {isLoggingOut ? 'Saindo...' : 'Sair'}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
