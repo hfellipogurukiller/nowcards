@@ -4,84 +4,84 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Updated to nowcards brand colors - navy blue primary, green accent */
-  --background: oklch(0.99 0.005 240);
-  --foreground: oklch(0.12 0.02 240);
-  --card: oklch(1 0 0);
+  /* NowCards Logo Colors - Light Theme */
+  --background: oklch(0.99 0.005 240); /* Clean white background */
+  --foreground: oklch(0.12 0.02 240); /* Dark navy text */
+  --card: oklch(1 0 0); /* Pure white cards */
   --card-foreground: oklch(0.12 0.02 240);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.12 0.02 240);
-  --primary: oklch(0.25 0.08 240); /* Navy blue from nowcards logo */
-  --primary-foreground: oklch(0.98 0.01 240);
+  --primary: oklch(0.15 0.12 240); /* Deep navy blue from logo background */
+  --primary-foreground: oklch(0.98 0.01 240); /* White text on navy */
   --secondary: oklch(0.96 0.01 240);
-  --secondary-foreground: oklch(0.25 0.02 240);
+  --secondary-foreground: oklch(0.15 0.02 240);
   --muted: oklch(0.96 0.01 240);
   --muted-foreground: oklch(0.55 0.02 240);
-  --accent: oklch(0.65 0.15 140); /* Green from nowcards logo */
+  --accent: oklch(0.7 0.25 140); /* Vibrant green from logo O */
   --accent-foreground: oklch(0.98 0.01 140);
   --destructive: oklch(0.6 0.22 25);
   --destructive-foreground: oklch(0.15 0.02 25);
   --border: oklch(0.92 0.01 240);
   --input: oklch(0.92 0.01 240);
-  --ring: oklch(0.25 0.08 240);
-  --success: oklch(0.65 0.15 140); /* Matching green accent */
+  --ring: oklch(0.15 0.12 240);
+  --success: oklch(0.7 0.25 140); /* Logo green for success */
   --success-foreground: oklch(0.15 0.02 140);
   --warning: oklch(0.7 0.18 60);
   --warning-foreground: oklch(0.15 0.02 60);
-  --chart-1: oklch(0.25 0.08 240);
-  --chart-2: oklch(0.65 0.15 140);
+  --chart-1: oklch(0.15 0.12 240);
+  --chart-2: oklch(0.7 0.25 140);
   --chart-3: oklch(0.45 0.12 200);
   --chart-4: oklch(0.7 0.18 60);
   --chart-5: oklch(0.6 0.22 25);
   --radius: 1rem;
   --sidebar: oklch(0.98 0.01 240);
   --sidebar-foreground: oklch(0.12 0.02 240);
-  --sidebar-primary: oklch(0.25 0.08 240);
+  --sidebar-primary: oklch(0.15 0.12 240);
   --sidebar-primary-foreground: oklch(0.98 0.01 240);
   --sidebar-accent: oklch(0.96 0.01 240);
-  --sidebar-accent-foreground: oklch(0.25 0.02 240);
+  --sidebar-accent-foreground: oklch(0.15 0.02 240);
   --sidebar-border: oklch(0.92 0.01 240);
-  --sidebar-ring: oklch(0.25 0.08 240);
+  --sidebar-ring: oklch(0.15 0.12 240);
 }
 
 .dark {
-  /* Dark theme with nowcards navy blue and green - enhanced for better contrast */
-  --background: oklch(0.06 0.01 240); /* Darker navy background */
-  --foreground: oklch(0.98 0.01 240);
-  --card: oklch(0.08 0.01 240); /* Slightly lighter than background */
+  /* NowCards Logo Colors - Dark Theme (Exact logo background) */
+  --background: oklch(0.08 0.12 240); /* Exact navy blue from logo background */
+  --foreground: oklch(0.98 0.01 240); /* Pure white text like logo */
+  --card: oklch(0.12 0.12 240); /* Slightly lighter navy for cards */
   --card-foreground: oklch(0.98 0.01 240);
-  --popover: oklch(0.08 0.01 240);
+  --popover: oklch(0.12 0.12 240);
   --popover-foreground: oklch(0.98 0.01 240);
-  --primary: oklch(0.45 0.15 240); /* Brighter navy for better visibility */
+  --primary: oklch(0.25 0.15 240); /* Brighter navy for interactive elements */
   --primary-foreground: oklch(0.98 0.01 240);
-  --secondary: oklch(0.12 0.01 240);
+  --secondary: oklch(0.15 0.12 240);
   --secondary-foreground: oklch(0.98 0.01 240);
-  --muted: oklch(0.12 0.01 240);
+  --muted: oklch(0.15 0.12 240);
   --muted-foreground: oklch(0.7 0.02 240);
-  --accent: oklch(0.8 0.2 140); /* Vibrant green accent */
-  --accent-foreground: oklch(0.06 0.01 140);
+  --accent: oklch(0.75 0.3 140); /* Exact vibrant green from logo O */
+  --accent-foreground: oklch(0.08 0.01 140);
   --destructive: oklch(0.75 0.25 25);
   --destructive-foreground: oklch(0.98 0.01 25);
-  --border: oklch(0.18 0.01 240);
-  --input: oklch(0.18 0.01 240);
-  --ring: oklch(0.45 0.15 240);
-  --success: oklch(0.8 0.2 140);
-  --success-foreground: oklch(0.06 0.01 140);
+  --border: oklch(0.2 0.12 240);
+  --input: oklch(0.2 0.12 240);
+  --ring: oklch(0.25 0.15 240);
+  --success: oklch(0.75 0.3 140); /* Logo green for success */
+  --success-foreground: oklch(0.08 0.01 140);
   --warning: oklch(0.85 0.2 60);
-  --warning-foreground: oklch(0.06 0.01 60);
-  --chart-1: oklch(0.45 0.15 240);
-  --chart-2: oklch(0.8 0.2 140);
+  --warning-foreground: oklch(0.08 0.01 60);
+  --chart-1: oklch(0.25 0.15 240);
+  --chart-2: oklch(0.75 0.3 140);
   --chart-3: oklch(0.6 0.18 200);
   --chart-4: oklch(0.85 0.2 60);
   --chart-5: oklch(0.75 0.25 25);
-  --sidebar: oklch(0.08 0.01 240);
+  --sidebar: oklch(0.1 0.12 240);
   --sidebar-foreground: oklch(0.98 0.01 240);
-  --sidebar-primary: oklch(0.45 0.15 240);
-  --sidebar-primary-foreground: oklch(0.06 0.01 240);
-  --sidebar-accent: oklch(0.12 0.01 240);
+  --sidebar-primary: oklch(0.25 0.15 240);
+  --sidebar-primary-foreground: oklch(0.08 0.01 240);
+  --sidebar-accent: oklch(0.15 0.12 240);
   --sidebar-accent-foreground: oklch(0.98 0.01 240);
-  --sidebar-border: oklch(0.18 0.01 240);
-  --sidebar-ring: oklch(0.45 0.15 240);
+  --sidebar-border: oklch(0.2 0.12 240);
+  --sidebar-ring: oklch(0.25 0.15 240);
 }
 
 @theme inline {
