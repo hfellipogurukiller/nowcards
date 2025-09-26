@@ -47,6 +47,36 @@
       "difficulty": "easy",
       "tags": ["storage", "s3", "unstructured-data"],
       "domain": "Storage"
+    },
+    {
+      "id": "csa-004",
+      "question": "Which of the following are benefits of using AWS Auto Scaling? (Select all that apply)",
+      "options": [
+        "Automatic scaling based on demand",
+        "Cost optimization",
+        "High availability",
+        "Manual intervention required"
+      ],
+      "correct_answers": [0, 1, 2],
+      "explanation": "AWS Auto Scaling provides automatic scaling, cost optimization, and high availability. Manual intervention is not a benefit of Auto Scaling.",
+      "difficulty": "medium",
+      "tags": ["auto-scaling", "cost-optimization", "availability"],
+      "domain": "Compute"
+    },
+    {
+      "id": "csa-005",
+      "question": "What are the key features of Amazon RDS? (Choose all that apply)",
+      "options": [
+        "Managed database service",
+        "Automatic backups",
+        "Manual scaling only",
+        "Multi-AZ deployment"
+      ],
+      "correct_answers": [0, 1, 3],
+      "explanation": "Amazon RDS is a managed service with automatic backups and Multi-AZ deployment. It supports automatic scaling, not just manual scaling.",
+      "difficulty": "medium",
+      "tags": ["rds", "database", "managed-services"],
+      "domain": "Database"
     }
   ]
 }

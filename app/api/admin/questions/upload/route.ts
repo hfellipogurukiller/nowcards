@@ -5,7 +5,8 @@ interface Question {
   id: string
   question: string
   options: string[]
-  correct_answer: number
+  correct_answer?: number  // For single answer questions
+  correct_answers?: number[]  // For multiple answer questions
   explanation: string
   difficulty: string
   tags: string[]
@@ -31,16 +32,24 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Validate each question
-    for (const question of questionSet.questions) {
-      if (!question.id || !question.question || !question.options || 
-          !Array.isArray(question.options) || question.correct_answer === undefined) {
-        return NextResponse.json(
-          { error: `Invalid question structure for question: ${question.id || 'unknown'}` },
-          { status: 400 }
-        )
+      // Validate each question
+      for (const question of questionSet.questions) {
+        if (!question.id || !question.question || !question.options || 
+            !Array.isArray(question.options)) {
+          return NextResponse.json(
+            { error: `Invalid question structure for question: ${question.id || 'unknown'}` },
+            { status: 400 }
+          )
+        }
+        
+        // Check if question has either correct_answer or correct_answers
+        if (question.correct_answer === undefined && (!question.correct_answers || !Array.isArray(question.correct_answers))) {
+          return NextResponse.json(
+            { error: `Question ${question.id} must have either correct_answer or correct_answers` },
+            { status: 400 }
+          )
+        }
       }
-    }
 
     const connection = await mysql.createConnection({
       host: process.env.DB_HOST || '45.90.123.13',
@@ -89,11 +98,17 @@ export async function POST(request: NextRequest) {
           [questionId]
         )
 
+        // Determine question type and correct answers
+        const isMultipleChoice = question.correct_answers && question.correct_answers.length > 0
+        const questionType = isMultipleChoice ? 'multi' : 'single'
+        const correctAnswers = isMultipleChoice ? question.correct_answers! : [question.correct_answer!]
+        const selectCount = isMultipleChoice ? question.correct_answers!.length : 1
+
         if (Array.isArray(existingQuestion) && existingQuestion.length > 0) {
           // Update existing question
           await connection.execute(
-            'UPDATE questions SET stem = ?, explanation = ?, difficulty = ?, domain = ?, updated_at = NOW() WHERE id = ?',
-            [question.question, question.explanation, question.difficulty, question.domain, questionId]
+            'UPDATE questions SET stem = ?, explanation = ?, difficulty = ?, domain = ?, type = ?, select_count = ?, updated_at = NOW() WHERE id = ?',
+            [question.question, question.explanation, question.difficulty, question.domain, questionType, selectCount, questionId]
           )
 
           // Delete existing options
@@ -105,9 +120,10 @@ export async function POST(request: NextRequest) {
           // Insert new options
           for (let i = 0; i < question.options.length; i++) {
             const optionId = crypto.randomUUID()
+            const isCorrect = correctAnswers.includes(i) ? 1 : 0
             await connection.execute(
               'INSERT INTO question_options (id, question_id, text, is_correct) VALUES (?, ?, ?, ?)',
-              [optionId, questionId, question.options[i], i === question.correct_answer ? 1 : 0]
+              [optionId, questionId, question.options[i], isCorrect]
             )
           }
 
@@ -116,15 +132,16 @@ export async function POST(request: NextRequest) {
           // Insert new question
           await connection.execute(
             'INSERT INTO questions (id, set_id, type, stem, explanation, difficulty, domain, select_count) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-            [questionId, setId, 'single', question.question, question.explanation, question.difficulty, question.domain, 1]
+            [questionId, setId, questionType, question.question, question.explanation, question.difficulty, question.domain, selectCount]
           )
 
           // Insert options
           for (let i = 0; i < question.options.length; i++) {
             const optionId = crypto.randomUUID()
+            const isCorrect = correctAnswers.includes(i) ? 1 : 0
             await connection.execute(
               'INSERT INTO question_options (id, question_id, text, is_correct) VALUES (?, ?, ?, ?)',
-              [optionId, questionId, question.options[i], i === question.correct_answer ? 1 : 0]
+              [optionId, questionId, question.options[i], isCorrect]
             )
           }
 
