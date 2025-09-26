@@ -85,7 +85,9 @@ export function getSetProgress(userId: string, setId: string): UserProgress[] {
 }
 
 export function calculateSessionStats(userId: string, setId: string, totalQuestions: number): SessionStats {
+  console.log('calculateSessionStats called', { userId, setId, totalQuestions })
   const setProgress = getSetProgress(userId, setId)
+  console.log('setProgress from localStorage:', setProgress)
 
   const completedQuestions = setProgress.length
   const correctAnswers = setProgress.reduce((sum, p) => sum + p.correctCount, 0)
@@ -95,7 +97,7 @@ export function calculateSessionStats(userId: string, setId: string, totalQuesti
   const averageStreak =
     setProgress.length > 0 ? setProgress.reduce((sum, p) => sum + p.streak, 0) / setProgress.length : 0
 
-  return {
+  const stats = {
     totalQuestions,
     completedQuestions,
     correctAnswers,
@@ -103,6 +105,9 @@ export function calculateSessionStats(userId: string, setId: string, totalQuesti
     accuracy: Math.round(accuracy),
     averageStreak: Math.round(averageStreak * 10) / 10,
   }
+  
+  console.log('calculated stats:', stats)
+  return stats
 }
 
 export function clearUserProgress(userId: string): void {
