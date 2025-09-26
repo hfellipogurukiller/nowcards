@@ -184,60 +184,11 @@ export default function HomePage() {
             <div className="flex items-center gap-3">
               <img src="/logo.png" alt="nowcards" className="h-10 w-auto" />
             </div>
-            <div className="flex items-center gap-2">
-              <ThemeToggle />
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={() => {
-                  // Remove dark class and add light class
-                  document.documentElement.classList.remove('dark')
-                  document.documentElement.classList.add('light')
-                  
-                  // Clear any existing theme preference
-                  localStorage.removeItem('theme')
-                  localStorage.setItem('theme', 'light')
-                  
-                  // Force theme change
-                  const event = new CustomEvent('theme-change', { detail: 'light' })
-                  window.dispatchEvent(event)
-                }}
-              >
-                ☀️ Claro
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={() => {
-                  // Remove light class and add dark class
-                  document.documentElement.classList.remove('light')
-                  document.documentElement.classList.add('dark')
-                  
-                  // Clear any existing theme preference
-                  localStorage.removeItem('theme')
-                  localStorage.setItem('theme', 'dark')
-                  
-                  // Force theme change
-                  const event = new CustomEvent('theme-change', { detail: 'dark' })
-                  window.dispatchEvent(event)
-                }}
-              >
-                🌙 Escuro
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={() => {
-                  console.log('Current HTML classes:', document.documentElement.className)
-                  console.log('Current localStorage theme:', localStorage.getItem('theme'))
-                  console.log('Current document element:', document.documentElement)
-                }}
-              >
-                🔍 Debug
-              </Button>
-              <LogoutButton variant="outline" size="sm" />
-              <UserHeader />
-            </div>
+                <div className="flex items-center gap-2">
+                  <ThemeToggle />
+                  <LogoutButton variant="outline" size="sm" />
+                  <UserHeader />
+                </div>
           </div>
         </div>
       </header>
