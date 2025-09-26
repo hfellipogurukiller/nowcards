@@ -13,7 +13,34 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 export function ThemeToggle() {
-  const { setTheme, theme } = useTheme()
+  const { setTheme, theme, resolvedTheme } = useTheme()
+
+  const handleThemeChange = (newTheme: string) => {
+    console.log('Changing theme to:', newTheme)
+    setTheme(newTheme)
+    
+    // Force update if needed
+    setTimeout(() => {
+      const html = document.documentElement
+      if (newTheme === 'light') {
+        html.classList.remove('dark')
+        html.classList.add('light')
+      } else if (newTheme === 'dark') {
+        html.classList.remove('light')
+        html.classList.add('dark')
+      } else {
+        // System theme - let the system decide
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (prefersDark) {
+          html.classList.remove('light')
+          html.classList.add('dark')
+        } else {
+          html.classList.remove('dark')
+          html.classList.add('light')
+        }
+      }
+    }, 100)
+  }
 
   return (
     <DropdownMenu>
@@ -25,15 +52,15 @@ export function ThemeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme('light')}>
+        <DropdownMenuItem onClick={() => handleThemeChange('light')}>
           <Sun className="mr-2 h-4 w-4" />
           <span>Claro {theme === 'light' && '✓'}</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('dark')}>
+        <DropdownMenuItem onClick={() => handleThemeChange('dark')}>
           <Moon className="mr-2 h-4 w-4" />
           <span>Escuro {theme === 'dark' && '✓'}</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('system')}>
+        <DropdownMenuItem onClick={() => handleThemeChange('system')}>
           <span className="mr-2 h-4 w-4">💻</span>
           <span>Sistema {theme === 'system' && '✓'}</span>
         </DropdownMenuItem>
