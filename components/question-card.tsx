@@ -171,7 +171,7 @@ export function QuestionCard({ q, onSubmit, submissionState, feedback, onNext }:
                 <Check className="w-20 h-20 mb-4 animate-scale-in" />
                 <h2 className="text-3xl font-bold mb-2">Correto!</h2>
                 <p className="text-lg opacity-90 mb-3">Muito bem! 🎉</p>
-                <p className="text-sm opacity-80 font-medium">{getCorrectAnswersText()}</p>
+                <p className="text-sm opacity-80 font-medium">{getCorrectAnswersText}</p>
                 <p className="text-xs opacity-60 mt-3">Toque para continuar</p>
               </>
             ) : (
@@ -179,7 +179,7 @@ export function QuestionCard({ q, onSubmit, submissionState, feedback, onNext }:
                 <X className="w-20 h-20 mb-4 animate-scale-in" />
                 <h2 className="text-3xl font-bold mb-2">Incorreto</h2>
                 <p className="text-lg opacity-90 mb-3">Tente novamente! 💪</p>
-                <p className="text-sm opacity-80 font-medium">{getCorrectAnswersText()}</p>
+                <p className="text-sm opacity-80 font-medium">{getCorrectAnswersText}</p>
                 <p className="text-xs opacity-60 mt-3">Toque para continuar</p>
               </>
             )}
@@ -190,7 +190,7 @@ export function QuestionCard({ q, onSubmit, submissionState, feedback, onNext }:
       <Card className="border-2 shadow-lg bg-card border-border">
         <CardHeader className="pb-4">
           <CardTitle className="text-lg sm:text-xl font-bold text-balance leading-tight">{q.stem}</CardTitle>
-          <p className="text-sm text-muted-foreground font-medium">{getInstructionText()}</p>
+          <p className="text-sm text-muted-foreground font-medium">{getInstructionText}</p>
         </CardHeader>
         <CardContent className="space-y-3">
           <div className="space-y-3">
