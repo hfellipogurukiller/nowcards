@@ -15,15 +15,6 @@ import {
 export function ThemeToggle() {
   const { setTheme, theme } = useTheme()
 
-  const handleThemeChange = (newTheme: string) => {
-    console.log('Changing theme to:', newTheme)
-    setTheme(newTheme)
-    // Force a page refresh to ensure theme change
-    setTimeout(() => {
-      window.location.reload()
-    }, 100)
-  }
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -34,15 +25,15 @@ export function ThemeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => handleThemeChange('light')}>
+        <DropdownMenuItem onClick={() => setTheme('light')}>
           <Sun className="mr-2 h-4 w-4" />
           <span>Claro {theme === 'light' && '✓'}</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleThemeChange('dark')}>
+        <DropdownMenuItem onClick={() => setTheme('dark')}>
           <Moon className="mr-2 h-4 w-4" />
           <span>Escuro {theme === 'dark' && '✓'}</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleThemeChange('system')}>
+        <DropdownMenuItem onClick={() => setTheme('system')}>
           <span className="mr-2 h-4 w-4">💻</span>
           <span>Sistema {theme === 'system' && '✓'}</span>
         </DropdownMenuItem>

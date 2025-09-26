@@ -190,13 +190,50 @@ export default function HomePage() {
                 variant="outline" 
                 size="sm" 
                 onClick={() => {
+                  // Remove dark class and add light class
                   document.documentElement.classList.remove('dark')
                   document.documentElement.classList.add('light')
+                  
+                  // Clear any existing theme preference
+                  localStorage.removeItem('theme')
                   localStorage.setItem('theme', 'light')
-                  window.location.reload()
+                  
+                  // Force theme change
+                  const event = new CustomEvent('theme-change', { detail: 'light' })
+                  window.dispatchEvent(event)
                 }}
               >
-                ☀️ Forçar Claro
+                ☀️ Claro
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => {
+                  // Remove light class and add dark class
+                  document.documentElement.classList.remove('light')
+                  document.documentElement.classList.add('dark')
+                  
+                  // Clear any existing theme preference
+                  localStorage.removeItem('theme')
+                  localStorage.setItem('theme', 'dark')
+                  
+                  // Force theme change
+                  const event = new CustomEvent('theme-change', { detail: 'dark' })
+                  window.dispatchEvent(event)
+                }}
+              >
+                🌙 Escuro
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => {
+                  console.log('Current HTML classes:', document.documentElement.className)
+                  console.log('Current localStorage theme:', localStorage.getItem('theme'))
+                  console.log('Current document element:', document.documentElement)
+                }}
+              >
+                🔍 Debug
               </Button>
               <LogoutButton variant="outline" size="sm" />
               <UserHeader />
