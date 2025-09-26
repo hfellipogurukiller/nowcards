@@ -5,8 +5,6 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import type { Question, Feedback, SubmissionState } from "@/lib/types"
 import { cn } from "@/lib/utils"
@@ -194,15 +192,11 @@ export function QuestionCard({ q, onSubmit, submissionState, feedback, onNext }:
         </CardHeader>
         <CardContent className="space-y-3">
           {q.type === "single" ? (
-            <RadioGroup
-              value={selectedIds[0] || ""}
-              onValueChange={handleSingleSelect}
-              disabled={submissionState === "answered"}
-              className="space-y-3"
-            >
+            <div className="space-y-3">
               {q.options.map((option) => (
                 <div
                   key={option.id}
+                  onClick={() => q.type === "single" ? handleSingleSelect(option.id) : handleMultiSelect(option.id, !selectedIds.includes(option.id))}
                   className={cn(
                     "flex items-start space-x-4 p-4 rounded-xl border-2 transition-all duration-200 touch-target",
                     "hover:shadow-md active:scale-[0.98] cursor-pointer",
@@ -211,18 +205,21 @@ export function QuestionCard({ q, onSubmit, submissionState, feedback, onNext }:
                     getOptionStyle(option.id),
                   )}
                 >
-                  <RadioGroupItem value={option.id} id={option.id} className="mt-1 flex-shrink-0" />
+                  <div className="mt-1 flex-shrink-0 w-4 h-4 rounded-full border-2 border-border flex items-center justify-center">
+                    {selectedIds.includes(option.id) && <div className="w-2 h-2 rounded-full bg-primary" />}
+                  </div>
                   <Label htmlFor={option.id} className="flex-1 cursor-pointer text-sm sm:text-base leading-relaxed">
                     {option.text}
                   </Label>
                 </div>
               ))}
-            </RadioGroup>
+            </div>
           ) : (
             <div className="space-y-3">
               {q.options.map((option) => (
                 <div
                   key={option.id}
+                  onClick={() => q.type === "single" ? handleSingleSelect(option.id) : handleMultiSelect(option.id, !selectedIds.includes(option.id))}
                   className={cn(
                     "flex items-start space-x-4 p-4 rounded-xl border-2 transition-all duration-200 touch-target",
                     "hover:shadow-md active:scale-[0.98] cursor-pointer",
@@ -231,13 +228,9 @@ export function QuestionCard({ q, onSubmit, submissionState, feedback, onNext }:
                     getOptionStyle(option.id),
                   )}
                 >
-                  <Checkbox
-                    id={option.id}
-                    checked={selectedIds.includes(option.id)}
-                    onCheckedChange={(checked) => handleMultiSelect(option.id, checked as boolean)}
-                    disabled={submissionState === "answered"}
-                    className="mt-1 flex-shrink-0"
-                  />
+                  <div className="mt-1 flex-shrink-0 w-4 h-4 rounded border-2 border-border flex items-center justify-center">
+                    {selectedIds.includes(option.id) && <div className="w-2 h-2 rounded bg-primary" />}
+                  </div>
                   <Label htmlFor={option.id} className="flex-1 cursor-pointer text-sm sm:text-base leading-relaxed">
                     {option.text}
                   </Label>
