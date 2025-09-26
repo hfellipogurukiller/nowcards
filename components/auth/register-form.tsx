@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Loader2, Eye, EyeOff } from 'lucide-react'
+import { useUser } from '@/lib/user-context'
 
 interface RegisterFormProps {
   onSuccess?: () => void
@@ -24,6 +25,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
   const [error, setError] = useState('')
   
   const router = useRouter()
+  const { setUser } = useUser()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -55,9 +57,8 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
       const data = await response.json()
 
       if (response.ok) {
-        // Store token in localStorage
-        localStorage.setItem('token', data.token)
-        localStorage.setItem('user', JSON.stringify(data.user))
+        // Update user context
+        setUser(data.user, data.token)
         
         // Trigger success callback or redirect
         if (onSuccess) {

@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import mysql from 'mysql2/promise'
+import jwt from 'jsonwebtoken'
+
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production'
 
 // Database configuration
 const dbConfig = {
@@ -25,10 +28,20 @@ export async function POST(request: NextRequest) {
     const connection = await mysql.createConnection(dbConfig)
 
     try {
-      // Find and delete the session
+      // Decode the token to get user ID
+      const decoded = jwt.verify(token, JWT_SECRET) as any
+      
+      if (!decoded.userId) {
+        return NextResponse.json(
+          { error: 'Invalid token' },
+          { status: 401 }
+        )
+      }
+      
+      // Delete all sessions for this user
       await connection.execute(
-        'DELETE FROM user_sessions WHERE token_hash = ?',
-        [token]
+        'DELETE FROM user_sessions WHERE user_id = ?',
+        [decoded.userId]
       )
 
       return NextResponse.json({
