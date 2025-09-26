@@ -196,6 +196,14 @@ export function StudyQueue({ questions, setId, userId }: StudyQueueProps) {
 
       console.log('Reset successful, updating local state...')
 
+      // Clear localStorage progress for this user and set
+      if (user?.id) {
+        console.log('Clearing localStorage progress...')
+        const { clearUserProgress } = await import('@/lib/progress-storage')
+        clearUserProgress(user.id)
+        console.log('localStorage cleared')
+      }
+
       // Reset local state
       setStats({
         total: questions.length,
