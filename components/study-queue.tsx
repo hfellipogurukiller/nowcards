@@ -215,7 +215,12 @@ export function StudyQueue({ questions, setId, userId }: StudyQueueProps) {
   if (stats.answered >= questions.length && queue.length === 0) {
     return (
       <div className="min-h-screen bg-background py-8 px-4">
-        <ProgressDashboard setId={setId} totalQuestions={questions.length} />
+        <ProgressDashboard 
+        setId={setId} 
+        totalQuestions={questions.length}
+        onResetStats={() => setShowResetModal(true)}
+        showResetButton={true}
+      />
 
         <Card className="w-full max-w-md mx-auto text-center">
           <CardContent className="pt-6">
@@ -233,24 +238,14 @@ export function StudyQueue({ questions, setId, userId }: StudyQueueProps) {
                 Taxa de acerto: <span className="font-medium">{Math.round((stats.correct / stats.total) * 100)}%</span>
               </p>
             </div>
-            <div className="space-y-2">
-              <div className="flex gap-2">
-                <Button onClick={resetStudy} className="flex-1">
-                  <RotateCcw className="w-4 h-4 mr-2" />
-                  Estudar Novamente
-                </Button>
-                <Button variant="outline" onClick={() => setShowHistory(!showHistory)} className="flex-1">
-                  <BarChart3 className="w-4 h-4 mr-2" />
-                  {showHistory ? "Ocultar" : "Ver"} Histórico
-                </Button>
-              </div>
-              <Button 
-                variant="destructive" 
-                onClick={() => setShowResetModal(true)}
-                className="w-full"
-              >
+            <div className="flex gap-2">
+              <Button onClick={resetStudy} className="flex-1">
                 <RotateCcw className="w-4 h-4 mr-2" />
-                Resetar Estatísticas
+                Estudar Novamente
+              </Button>
+              <Button variant="outline" onClick={() => setShowHistory(!showHistory)} className="flex-1">
+                <BarChart3 className="w-4 h-4 mr-2" />
+                {showHistory ? "Ocultar" : "Ver"} Histórico
               </Button>
             </div>
           </CardContent>
@@ -273,7 +268,12 @@ export function StudyQueue({ questions, setId, userId }: StudyQueueProps) {
 
   return (
     <div className="min-h-screen bg-background py-8 px-4">
-      <ProgressDashboard setId={setId} totalQuestions={questions.length} />
+      <ProgressDashboard 
+        setId={setId} 
+        totalQuestions={questions.length}
+        onResetStats={() => setShowResetModal(true)}
+        showResetButton={true}
+      />
       <ProgressBar stats={stats} />
       <QuestionCard
         q={currentQuestion}

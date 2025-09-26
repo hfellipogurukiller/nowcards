@@ -6,16 +6,18 @@ import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { TrendingUp, Target, Award, Clock, ChevronDown, ChevronUp, BarChart3 } from "lucide-react"
+import { TrendingUp, Target, Award, Clock, ChevronDown, ChevronUp, BarChart3, RotateCcw } from "lucide-react"
 import { useUser } from "@/lib/user-context"
 import { calculateSessionStats, type SessionStats } from "@/lib/progress-storage"
 
 interface ProgressDashboardProps {
   setId: string
   totalQuestions: number
+  onResetStats?: () => void
+  showResetButton?: boolean
 }
 
-export function ProgressDashboard({ setId, totalQuestions }: ProgressDashboardProps) {
+export function ProgressDashboard({ setId, totalQuestions, onResetStats, showResetButton = false }: ProgressDashboardProps) {
   const { user } = useUser()
   const [stats, setStats] = useState<SessionStats | null>(null)
   const [isStatsOpen, setIsStatsOpen] = useState(false)
@@ -139,6 +141,20 @@ export function ProgressDashboard({ setId, totalQuestions }: ProgressDashboardPr
               </CardContent>
             </Card>
           </div>
+          
+          {showResetButton && onResetStats && (
+            <div className="pt-3 border-t border-border">
+              <Button 
+                variant="destructive" 
+                size="sm"
+                onClick={onResetStats}
+                className="w-full gap-2"
+              >
+                <RotateCcw className="h-4 w-4" />
+                Resetar Estatísticas
+              </Button>
+            </div>
+          )}
         </CollapsibleContent>
       </Collapsible>
     </div>
