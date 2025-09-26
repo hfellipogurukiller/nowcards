@@ -1,0 +1,37 @@
+{
+  "certification": "NOME_DA_CERTIFICAÇÃO",
+  "description": "Descrição opcional do conjunto de questões",
+  "version": "1.0",
+  "questions": [
+    {
+      "id": "questao-001",
+      "question": "Sua pergunta aqui?",
+      "options": [
+        "Opção A",
+        "Opção B", 
+        "Opção C",
+        "Opção D"
+      ],
+      "correct_answer": 0,
+      "explanation": "Explicação detalhada da resposta correta.",
+      "difficulty": "easy",
+      "tags": ["tag1", "tag2", "tag3"],
+      "domain": "Domínio da Questão"
+    },
+    {
+      "id": "questao-002",
+      "question": "Questão de múltipla escolha? (Selecione todas que se aplicam)",
+      "options": [
+        "Opção A",
+        "Opção B",
+        "Opção C", 
+        "Opção D"
+      ],
+      "correct_answers": [0, 2],
+      "explanation": "Explicação das respostas corretas.",
+      "difficulty": "medium",
+      "tags": ["tag1", "tag2"],
+      "domain": "Domínio da Questão"
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "certification": "AWS Certified Solutions Architect - Associate",
+  "description": "Questões de prática para AWS CSA com exemplos reais",
+  "version": "1.0",
+  "questions": [
+    {
+      "id": "aws-csa-001",
+      "question": "Qual é a principal diferença entre Amazon S3 e Amazon EBS?",
+      "options": [
+        "S3 é para armazenamento de objetos, EBS é para volumes de blocos",
+        "S3 é mais barato que EBS",
+        "EBS suporta apenas Linux",
+        "S3 não oferece durabilidade"
+      ],
+      "correct_answer": 0,
+      "explanation": "Amazon S3 é um serviço de armazenamento de objetos para dados não estruturados, enquanto Amazon EBS fornece volumes de blocos para instâncias EC2. São serviços complementares com casos de uso diferentes.",
+      "difficulty": "easy",
+      "tags": ["aws", "s3", "ebs", "storage", "block-storage", "object-storage"],
+      "domain": "Storage"
+    },
+    {
+      "id": "aws-csa-002",
+      "question": "Quais são os benefícios do AWS Auto Scaling? (Selecione todas que se aplicam)",
+      "options": [
+        "Escalabilidade automática baseada na demanda",
+        "Otimização de custos",
+        "Alta disponibilidade",
+        "Requer intervenção manual constante"
+      ],
+      "correct_answers": [0, 1, 2],
+      "explanation": "AWS Auto Scaling oferece escalabilidade automática, otimização de custos e alta disponibilidade. A intervenção manual constante não é um benefício, mas sim uma limitação que o Auto Scaling resolve.",
+      "difficulty": "medium",
+      "tags": ["aws", "auto-scaling", "scalability", "cost-optimization", "high-availability"],
+      "domain": "Compute"
+    },
+    {
+      "id": "aws-csa-003",
+      "question": "Em uma arquitetura de alta disponibilidade, quantas Availability Zones você deve usar no mínimo?",
+      "options": [
+        "1 AZ",
+        "2 AZs",
+        "3 AZs",
+        "4 AZs"
+      ],
+      "correct_answer": 1,
+      "explanation": "Para alta disponibilidade, é recomendado usar pelo menos 2 Availability Zones para distribuir a carga e garantir redundância em caso de falha de uma AZ.",
+      "difficulty": "medium",
+      "tags": ["aws", "high-availability", "availability-zones", "redundancy", "architecture"],
+      "domain": "Architecture"
+    },
+    {
+      "id": "aws-csa-004",
+      "question": "Quais serviços AWS são adequados para aplicações serverless? (Selecione todas que se aplicam)",
+      "options": [
+        "AWS Lambda",
+        "Amazon API Gateway",
+        "Amazon EC2",
+        "Amazon DynamoDB"
+      ],
+      "correct_answers": [0, 1, 3],
+      "explanation": "AWS Lambda (computação serverless), Amazon API Gateway (API serverless) e Amazon DynamoDB (banco NoSQL serverless) são adequados para aplicações serverless. Amazon EC2 requer gerenciamento de servidores.",
+      "difficulty": "hard",
+      "tags": ["aws", "serverless", "lambda", "api-gateway", "dynamodb", "ec2"],
+      "domain": "Serverless"
+    },
+    {
+      "id": "aws-csa-005",
+      "question": "Qual é o tempo de retenção padrão dos logs do Amazon CloudWatch?",
+      "options": [
+        "7 dias",
+        "14 dias",
+        "30 dias",
+        "Indefinido"
+      ],
+      "correct_answer": 1,
+      "explanation": "Por padrão, os logs do Amazon CloudWatch são retidos por 14 dias. Você pode configurar retenção mais longa ou exportar para S3 para armazenamento de longo prazo.",
+      "difficulty": "medium",
+      "tags": ["aws", "cloudwatch", "logging", "monitoring", "retention"],
+      "domain": "Monitoring"
+    },
+    {
+      "id": "aws-csa-006",
+      "question": "Em uma arquitetura de microserviços, quais serviços AWS ajudam na descoberta de serviços? (Selecione todas que se aplicam)",
+      "options": [
+        "Amazon ECS",
+        "AWS App Mesh",
+        "Amazon Route 53",
+        "Amazon S3"
+      ],
+      "correct_answers": [0, 1, 2],
+      "explanation": "Amazon ECS (orquestração de containers), AWS App Mesh (service mesh) e Amazon Route 53 (DNS) ajudam na descoberta de serviços. Amazon S3 é para armazenamento, não descoberta de serviços.",
+      "difficulty": "hard",
+      "tags": ["aws", "microservices", "service-discovery", "ecs", "app-mesh", "route53"],
+      "domain": "Microservices"
+    }
+  ]
+}
