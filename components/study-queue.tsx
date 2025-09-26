@@ -21,8 +21,9 @@ interface StudyQueueProps {
 
 export function StudyQueue({ questions, setId, userId }: StudyQueueProps) {
   const { user } = useUser()
-  const [queue, setQueue] = useState<Question[]>([])
+  const [questionIds, setQuestionIds] = useState<string[]>([]) // Store only IDs for lazy loading
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null)
+  const [currentIndex, setCurrentIndex] = useState(0)
   const [submissionState, setSubmissionState] = useState<SubmissionState>("idle")
   const [feedback, setFeedback] = useState<Feedback | null>(null)
   const [stats, setStats] = useState<StudyStats>({
@@ -36,12 +37,38 @@ export function StudyQueue({ questions, setId, userId }: StudyQueueProps) {
   const [showResetModal, setShowResetModal] = useState(false)
   const [isResetting, setIsResetting] = useState(false)
   const [resetTrigger, setResetTrigger] = useState(0) // Trigger to force ProgressDashboard refresh
+  const [isLoadingQuestion, setIsLoadingQuestion] = useState(false)
 
-  // Initialize queue with shuffled questions
+  // Initialize question IDs with shuffled order
   useEffect(() => {
     const shuffled = [...questions].sort(() => Math.random() - 0.5)
-    setQueue(shuffled)
-    setCurrentQuestion(shuffled[0] || null)
+    const ids = shuffled.map(q => q.id)
+    setQuestionIds(ids)
+    setCurrentIndex(0)
+    
+    // Load first question immediately
+    if (ids.length > 0) {
+      loadQuestion(ids[0])
+    }
+  }, [questions])
+
+  // Load question by ID (lazy loading)
+  const loadQuestion = useCallback((questionId: string) => {
+    setIsLoadingQuestion(true)
+    
+    // Small delay for better UX (prevents flickering)
+    setTimeout(() => {
+      // Find question in the original questions array
+      const question = questions.find(q => q.id === questionId)
+      
+      if (question) {
+        setCurrentQuestion(question)
+        setSubmissionState("idle")
+        setFeedback(null)
+      }
+      
+      setIsLoadingQuestion(false)
+    }, 50) // Minimal delay for smooth transition
   }, [questions])
 
   // Handle next question event
@@ -120,40 +147,53 @@ export function StudyQueue({ questions, setId, userId }: StudyQueueProps) {
   const moveToNextQuestion = useCallback(() => {
     if (!currentQuestion) return
 
-    setQueue((prevQueue) => {
-      const newQueue = [...prevQueue]
-      const currentIndex = newQueue.findIndex((q) => q.id === currentQuestion.id)
+    setQuestionIds((prevIds) => {
+      const newIds = [...prevIds]
+      const currentId = currentQuestion.id
+      const currentIdx = newIds.findIndex(id => id === currentId)
 
-      if (currentIndex === -1) return newQueue
+      if (currentIdx === -1) return newIds
 
       // Remove current question from queue
-      const [removedQuestion] = newQueue.splice(currentIndex, 1)
+      const [removedId] = newIds.splice(currentIdx, 1)
 
       if (feedback?.result === "correct") {
         // Correct: add to end of queue
-        newQueue.push(removedQuestion)
+        newIds.push(removedId)
       } else {
         // Wrong: reinsert after 2 positions (or at end if queue is too short)
-        const insertPosition = Math.min(2, newQueue.length)
-        newQueue.splice(insertPosition, 0, removedQuestion)
+        const insertPosition = Math.min(2, newIds.length)
+        newIds.splice(insertPosition, 0, removedId)
       }
 
-      // Set next current question
-      const nextQuestion = newQueue[0] || null
-      setCurrentQuestion(nextQuestion)
+      // Load next question
+      const nextId = newIds[0]
+      if (nextId) {
+        loadQuestion(nextId)
+        setCurrentIndex(0)
+      } else {
+        setCurrentQuestion(null)
+      }
 
-      return newQueue
+      return newIds
     })
 
     // Reset state for next question
     setSubmissionState("idle")
     setFeedback(null)
-  }, [currentQuestion, feedback])
+  }, [currentQuestion, feedback, loadQuestion])
 
-  const resetStudy = () => {
+  const resetStudy = useCallback(() => {
     const shuffled = [...questions].sort(() => Math.random() - 0.5)
-    setQueue(shuffled)
-    setCurrentQuestion(shuffled[0] || null)
+    const ids = shuffled.map(q => q.id)
+    setQuestionIds(ids)
+    setCurrentIndex(0)
+    
+    // Load first question
+    if (ids.length > 0) {
+      loadQuestion(ids[0])
+    }
+    
     setSubmissionState("idle")
     setFeedback(null)
     setStats({
@@ -164,7 +204,7 @@ export function StudyQueue({ questions, setId, userId }: StudyQueueProps) {
       pct: 0,
     })
     setShowHistory(false)
-  }
+  }, [questions, loadQuestion])
 
   const handleResetStats = async () => {
     console.log('handleResetStats called', { user: user?.id, setId })
@@ -212,10 +252,17 @@ export function StudyQueue({ questions, setId, userId }: StudyQueueProps) {
         pct: 0,
       })
       
-      // Reset queue with fresh questions
+      // Reset queue with fresh questions (lazy loading)
       const shuffled = [...questions].sort(() => Math.random() - 0.5)
-      setQueue(shuffled)
-      setCurrentQuestion(shuffled[0] || null)
+      const ids = shuffled.map(q => q.id)
+      setQuestionIds(ids)
+      setCurrentIndex(0)
+      
+      // Load first question
+      if (ids.length > 0) {
+        loadQuestion(ids[0])
+      }
+      
       setSubmissionState("idle")
       setFeedback(null)
 
@@ -281,11 +328,14 @@ export function StudyQueue({ questions, setId, userId }: StudyQueueProps) {
     )
   }
 
-  if (!currentQuestion) {
+  if (!currentQuestion || isLoadingQuestion) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <p className="text-muted-foreground">Carregando questões...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">
+            {isLoadingQuestion ? "Carregando questão..." : "Carregando questões..."}
+          </p>
         </div>
       </div>
     )
