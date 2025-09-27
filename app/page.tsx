@@ -12,6 +12,7 @@ import { LogoutButton } from "@/components/logout-button"
 import { useAuthCheck } from "@/hooks/use-auth-check"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Logo } from "@/components/logo"
+import { PWAInstallPrompt } from "@/components/pwa-install-prompt"
 
 interface StudySet {
   id: string
@@ -306,6 +307,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      
+      {/* PWA Install Prompt */}
+      <PWAInstallPrompt />
     </div>
   )
 }
